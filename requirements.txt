@@ -1,0 +1,24 @@
+# segment-anything
+# -e git+ssh://git@github.com/furrrow/segment-anything.git@9e7e842e48f50f3c73abc93271d72e25e6ecdc5f#egg=segment_anything
+# cd segment_anything; pip install -e .
+-e .
+opencv-python
+pycocotools
+matplotlib
+onnxruntime
+onnx
+
+torch
+torchvision
+supervision
+
+# gnd / ROS
+bagpy
+roslibpy
+rosnumpy
+pypcd4
+rospy_message_converter
+
+# misc
+tqdm
+tyro

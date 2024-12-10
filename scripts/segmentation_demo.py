@@ -33,7 +33,8 @@ DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 # DEVICE = torch.device('cpu')
 MODEL_TYPE = "vit_h"
 CHECKPOINT_PATH = "../sam_vit_h_4b8939.pth"
-IMAGE_PATH = "../spot_outdoor.png"
+IMAGE_PATH = "../images/pronav-cover.jpg"
+# IMAGE_PATH = "../images/spot_outdoor.png"
 
 sam = sam_model_registry[MODEL_TYPE](checkpoint=CHECKPOINT_PATH)
 sam.to(device=DEVICE)
@@ -44,20 +45,29 @@ image_bgr = cv2.imread(IMAGE_PATH)
 image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
 masks = mask_generator.generate(image_rgb)
 
-image_np = np.array(image_rgb)
+image_np = np.array(image_bgr)
 # Reshape the image data to a valid shape
-print(image_np.shape)
+print("image shape", image_np.shape)
+print(f"masks length: {len(masks)}")
+print(f"fields in each mask: {masks[0].keys()}")
+print(f"segmentation mask shape: {masks[0]['segmentation'].shape}")
 
-# mask_annotator = sv.MaskAnnotator()
-# detections = sv.Detections.from_sam(result)
-# annotated_image = mask_annotator.annotate(image_bgr, detections)
+mask_annotator = sv.MaskAnnotator(color_lookup=sv.ColorLookup.INDEX)
+detections = sv.Detections.from_sam(masks)
+annotated_frame = mask_annotator.annotate(
+    scene=image_bgr.copy(),
+    detections=detections
+)
 
-# Plot the original image and the mask
-fig, axs = plt.subplots(1, 2, figsize=(16, 16))
-axs[0].imshow(image_rgb)
-axs[1].imshow(image_rgb)
-show_anns(masks, axs[1])
-axs[0].axis('off')
-axs[1].axis('off')
-plt.show()
+# If we want to plot the original image and the mask
+# fig, axs = plt.subplots(1, 2, figsize=(16, 16))
+# axs[0].imshow(image_rgb)
+# axs[1].imshow(annotated_frame)
+# axs[0].axis('off')
+# axs[1].axis('off')
+
+# plot just the annotation
+implot = plt.imshow(annotated_frame)
+plt.axis("off")
+# plt.show()
 plt.savefig("figure.png")
