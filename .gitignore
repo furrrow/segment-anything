@@ -32,7 +32,6 @@ model_ts*.txt
 *~
 
 # editor settings
-.idea
 .vscode
 _darcs
 
@@ -40,3 +39,13 @@ _darcs
 **/node_modules
 yarn.lock
 package-lock.json
+
+# https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+dog/
